@@ -28,3 +28,7 @@ Lizard Manager is an ESP-IDF based project for monitoring and controlling a rept
 - Simple user interface for configuration and monitoring
 - Data logging and analytics features
 
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
