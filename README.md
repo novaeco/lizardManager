@@ -21,6 +21,16 @@ Lizard Manager is an ESP-IDF based project for monitoring and controlling a rept
 3. Build the firmware with `idf.py build`.
 4. Flash and monitor with `idf.py flash monitor`.
 
+## Configuration
+
+A `sdkconfig.defaults` file at the repository root provides common settings for a generic ESP32 board, including UART speeds. Copy it to `sdkconfig` before building:
+
+```bash
+cp sdkconfig.defaults sdkconfig
+```
+
+Modify the copied file with `idf.py menuconfig` if your board needs different options. You can maintain multiple configuration files (for example, `sdkconfig.nodemcu`) and select one with `idf.py -DSDKCONFIG=<file> build`.
+
 ## Roadmap
 
 - Sensor integration for monitoring enclosure conditions
