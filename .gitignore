@@ -1,0 +1,15 @@
+# Build artifacts and generated files
+build/
+
+# SDK configuration from ESP-IDF
+sdkconfig
+sdkconfig.old
+
+# Temporary files
+*.tmp
+*.temp
+*~
+*.swp
+
+# Based on GitHub's ESP-IDF.gitignore template
+# https://github.com/github/gitignore/blob/main/community/embedded/esp-idf.gitignore
