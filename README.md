@@ -38,6 +38,19 @@ Modify the copied file with `idf.py menuconfig` if your board needs different op
 - Simple user interface for configuration and monitoring
 - Data logging and analytics features
 
+## Logging
+
+Sensor readings are saved to `/spiffs/readings.csv` on the device's SPIFFS
+partition. You can retrieve the file over UART with
+`idf.py spiffs_upload`/`spiffs_download` or by reading the partition using the
+ESP-IDF SPIFFS utilities.
+
+## User Interface
+
+A small LVGL-based UI shows the current temperature and humidity on the
+connected display. The interface updates every five seconds with the latest
+values from the sensors.
+
 
 ## License
 
