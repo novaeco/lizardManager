@@ -2,6 +2,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_system.h"
 #include "driver/gpio.h"
 #include "dht22.h"
 #include "ds18b20.h"
@@ -11,6 +12,11 @@
 
 static const char *TAG = "main";
 
+static void cleanup(void)
+{
+    logger_close();
+}
+
 void app_main(void)
 {
     ESP_LOGI(TAG, "Hello Lizard Manager!");
@@ -19,6 +25,7 @@ void app_main(void)
     ds18b20_init(GPIO_NUM_5);
     relay_init(GPIO_NUM_2);
     logger_init();
+    esp_register_shutdown_handler(&cleanup);
     ui_init();
 
     while (true) {
@@ -30,4 +37,6 @@ void app_main(void)
         ui_set_values(t1, h1);
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
+
+    cleanup();
 }
