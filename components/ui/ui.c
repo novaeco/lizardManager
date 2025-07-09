@@ -82,8 +82,36 @@ static esp_lcd_panel_handle_t display_board_init(void)
 static esp_lcd_panel_handle_t display_board_init(void)
 {
     ESP_LOGI(TAG, "Initializing parallel display (%dx%d)", CONFIG_UI_DISPLAY_WIDTH, CONFIG_UI_DISPLAY_HEIGHT);
-    /* TODO: Add parallel display driver initialization here */
-    return NULL;
+
+    esp_lcd_i80_bus_config_t bus_config = {
+        .dc_gpio_num = 16,
+        .wr_gpio_num = 21,
+        .data_gpio_nums = {12, 13, 14, 27, 26, 25, 33, 32},
+        .bus_width = 8,
+        .max_transfer_bytes = CONFIG_UI_DISPLAY_WIDTH * CONFIG_UI_DISPLAY_HEIGHT * 2 + 8,
+    };
+    esp_lcd_i80_bus_handle_t i80_bus = NULL;
+    ESP_ERROR_CHECK(esp_lcd_new_i80_bus(&bus_config, &i80_bus));
+
+    esp_lcd_panel_io_handle_t io_handle = NULL;
+    esp_lcd_panel_io_i80_config_t io_config = {
+        .cs_gpio_num = 15,
+        .pclk_hz = 10 * 1000 * 1000,
+        .trans_queue_depth = 10,
+    };
+    ESP_ERROR_CHECK(esp_lcd_new_panel_io_i80(i80_bus, &io_config, &io_handle));
+
+    esp_lcd_panel_dev_config_t panel_config = {
+        .reset_gpio_num = 17,
+        .color_space = ESP_LCD_COLOR_SPACE_RGB,
+        .bits_per_pixel = 16,
+    };
+    ESP_ERROR_CHECK(esp_lcd_new_panel_ili9341(io_handle, &panel_config, &panel_handle));
+    ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
+    ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
+    ESP_ERROR_CHECK(esp_lcd_panel_mirror(panel_handle, true, false));
+    ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
+    return panel_handle;
 }
 #else
 static esp_lcd_panel_handle_t display_board_init(void)
