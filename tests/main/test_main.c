@@ -78,15 +78,18 @@ void test_logger_write_temp_fs(void)
 void app_main(void)
 {
     UNITY_BEGIN();
+    RUN_TEST(test_dht22_requires_init);
     RUN_TEST(test_dht22_init_invalid_pin);
     RUN_TEST(test_dht22_init_valid_pin);
-    RUN_TEST(test_dht22_requires_init);
+
+    RUN_TEST(test_ds18b20_requires_init);
     RUN_TEST(test_ds18b20_init_invalid_pin);
     RUN_TEST(test_ds18b20_init_valid_pin);
-    RUN_TEST(test_ds18b20_requires_init);
+
+    RUN_TEST(test_relay_requires_init);
     RUN_TEST(test_relay_init_invalid_pin);
     RUN_TEST(test_relay_basic);
-    RUN_TEST(test_relay_requires_init);
+
     RUN_TEST(test_logger_requires_init);
     RUN_TEST(test_logger_write_temp_fs);
     UNITY_END();
