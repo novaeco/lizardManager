@@ -3,6 +3,7 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_system.h"
+#include "esp_err.h"
 #include "driver/gpio.h"
 #include "dht22.h"
 #include "ds18b20.h"
@@ -22,11 +23,40 @@ void app_main(void)
 {
     ESP_LOGI(TAG, "Hello Lizard Manager!");
 
-    settings_init();
-    dht22_init(GPIO_NUM_4);
-    ds18b20_init(GPIO_NUM_5);
-    relay_init(GPIO_NUM_2);
-    logger_init();
+    esp_err_t err;
+
+    err = settings_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "settings_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+    ESP_LOGI(TAG, "settings initialized");
+
+    err = dht22_init(GPIO_NUM_4);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "dht22_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+
+    err = ds18b20_init(GPIO_NUM_5);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "ds18b20_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+
+    err = relay_init(GPIO_NUM_2);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "relay_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+
+    err = logger_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "logger_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+
+    ESP_LOGI(TAG, "All components initialized");
     esp_register_shutdown_handler(&cleanup);
     ui_init(NULL);
 
