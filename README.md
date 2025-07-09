@@ -58,6 +58,9 @@ connected display. Use `idf.py menuconfig` to select an SPI or parallel
 interface and to set the default screen resolution. The interface updates every
 five seconds with the latest values from the sensors.
 
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for coding style guidelines, the pull request workflow, and instructions on running tests locally.
 
 ## License
 
