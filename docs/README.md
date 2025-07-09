@@ -33,3 +33,61 @@ configurable thresholds stored in NVS. Default values can be set in
 `menuconfig` under **Settings**. At runtime you can update the ranges over
 UART using the `settings_set_*` functions from a custom command handler or
 via `idf.py monitor`.
+
+## ESP32 Pinouts
+
+Below are simplified pinout diagrams for two commonly used development boards. Consult the manufacturer's documentation for complete details.
+
+### ESP32-DevKitC (WROOM-32)
+
+```
+                +-------------------------+
+ 3V3     [ ] -- | 3V3       IO23      [ ] |
+ EN      [ ] -- | EN        IO22      [ ] |
+ IO36    [ ] -- | IO36      TX0       [ ] |
+ IO39    [ ] -- | IO39      RX0       [ ] |
+ IO34    [ ] -- | IO34      IO21      [ ] |
+ IO35    [ ] -- | IO35      IO19      [ ] |
+ IO32    [ ] -- | IO32      IO18      [ ] |
+ IO33    [ ] -- | IO33      IO5       [ ] |
+ GND     [ ] -- | GND       IO17      [ ] |
+ VIN/5V  [ ] -- | 5V        IO16      [ ] |
+                +-------------------------+
+```
+
+### NodeMCU‑32S
+
+```
+                +-------------------------+
+ 3V3     [ ] -- | 3V3       IO23      [ ] |
+ EN      [ ] -- | EN        IO22      [ ] |
+ IO36    [ ] -- | IO36      TX0       [ ] |
+ IO39    [ ] -- | IO39      RX0       [ ] |
+ IO34    [ ] -- | IO34      IO21      [ ] |
+ IO35    [ ] -- | IO35      IO19      [ ] |
+ IO32    [ ] -- | IO32      IO18      [ ] |
+ IO33    [ ] -- | IO33      IO5       [ ] |
+ GND     [ ] -- | GND       IO17      [ ] |
+ VIN/5V  [ ] -- | 5V        IO16      [ ] |
+                +-------------------------+
+```
+
+These diagrams show the general layout of pins. Only the power rails, UART and commonly used GPIO pins are included.
+
+## Example Wiring
+
+The default firmware assumes the following connections:
+
+- **DHT22** data pin on **GPIO4**
+- **DS18B20** data pin on **GPIO5**
+- **Relay** control pin on **GPIO2**
+
+If a display is attached, connect the SPI or parallel signals according to the board's pinout. Keep data wires short to avoid noise on the sensor lines.
+
+## Power and Safety Notes
+
+The ESP32 operates at 3.3 V logic. Do not connect 5 V signals directly to GPIO pins. Use a level shifter for peripherals that require 5 V.
+
+Large loads such as heating mats or lamps must be switched via a relay or MOSFET rated for the voltage and current of the device. Ensure all mains wiring is properly insulated and follow local electrical safety regulations.
+
+A stable power supply is essential. Budget extra headroom for attached peripherals and avoid powering high-current devices from the ESP32's 3.3 V regulator.
