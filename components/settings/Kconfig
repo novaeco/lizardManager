@@ -1,0 +1,14 @@
+menu "Settings"
+config SETTINGS_TEMP_MIN
+    float "Minimum temperature (C)"
+    default 20.0
+config SETTINGS_TEMP_MAX
+    float "Maximum temperature (C)"
+    default 30.0
+config SETTINGS_HUM_MIN
+    float "Minimum humidity (%)"
+    default 40.0
+config SETTINGS_HUM_MAX
+    float "Maximum humidity (%)"
+    default 60.0
+endmenu

@@ -31,6 +31,12 @@ cp sdkconfig.defaults sdkconfig
 
 Modify the copied file with `idf.py menuconfig` if your board needs different options. You can maintain multiple configuration files (for example, `sdkconfig.nodemcu`) and select one with `idf.py -DSDKCONFIG=<file> build`.
 
+### Temperature and Humidity Ranges
+
+Thresholds for activating the relay are stored in NVS and can be configured
+with `idf.py menuconfig` under **Settings**. They may also be changed at runtime
+using the `settings_set_temp_range` and `settings_set_hum_range` APIs.
+
 ## Roadmap
 
 - Sensor integration for monitoring enclosure conditions
