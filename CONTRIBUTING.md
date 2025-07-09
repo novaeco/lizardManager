@@ -9,6 +9,12 @@ project consistent and easy to maintain.
 * Limit lines to **100 characters** where possible.
 * Follow typical ESP-IDF C conventions (lowercase `snake_case` for functions and variables).
 * Document public functions with brief comments explaining parameters and return values.
+## Branch Naming
+
+* Use `feature/<description>` for new features.
+* Use `fix/<description>` for bug fixes.
+* Optionally include issue numbers, e.g. `feature/123-short-desc`.
+
 
 ## Pull Request Process
 
