@@ -23,6 +23,10 @@ For SPI screens connect MOSI, MISO, SCLK, CS and D/C to the ESP32's SPI bus.
 Parallel displays require wiring the D0–D7 data lines and the control pins
 (WR, RD, CS and D/C). Use level shifting if your hardware operates at 5 V.
 
+The default firmware initializes an **ILI9341** compatible SPI display using the
+`esp_lcd` driver. Pin assignments can be customized in the source or via
+`menuconfig`.
+
 You may also override the resolution at runtime by passing a
 `ui_screen_config_t` structure to `ui_init`.
 
@@ -83,6 +87,19 @@ The default firmware assumes the following connections:
 - **Relay** control pin on **GPIO2**
 
 If a display is attached, connect the SPI or parallel signals according to the board's pinout. Keep data wires short to avoid noise on the sensor lines.
+
+### Display Wiring Example
+
+When using the built-in ILI9341 driver the following pins are expected by default:
+
+- **MOSI** on **GPIO23**
+- **SCLK** on **GPIO18**
+- **Chip Select** on **GPIO5**
+- **Data/Command** on **GPIO16**
+- **Reset** on **GPIO17**
+
+The configuration assumes a 320x240 screen. Adjust the pins or resolution in
+`menuconfig` under **UI configuration** if your hardware differs.
 
 ## Power and Safety Notes
 
