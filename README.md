@@ -9,6 +9,7 @@ Lizard Manager is an ESP-IDF based project for monitoring and controlling a rept
 - `config/` - configuration files
 - `docs/` - project documentation
 - Wiring recommendations are available in `docs/pin_assignments.md`
+- A step-by-step hardware guide can be found in `docs/hardware_setup.md`
 
 ## Prerequisites
 

@@ -18,11 +18,12 @@ project consistent and easy to maintain.
 
 ## Pull Request Process
 
-1. Fork the repository and create a new branch for your feature or fix.
-2. Make your changes with clear, descriptive commit messages.
-3. Ensure that no unrelated changes are included in the branch.
-4. Open a pull request against the `main` branch and describe your changes.
-5. One or more maintainers will review your submission and may request updates.
+1. Fork the repository and create a dedicated branch for your changes.
+2. Make your edits with clear, descriptive commit messages.
+3. Keep commits focused on a single topic.
+4. Push the branch to your fork and open a pull request against `main`.
+5. Describe the motivation for the change and reference related issues if applicable.
+6. One or more maintainers will review your submission and may request updates.
 
 ## Testing Requirements
 
@@ -35,3 +36,9 @@ idf.py -C tests build
 ```
 
 The CI workflow will run the same commands automatically on GitHub Actions.
+
+## Good Practices
+
+* Format new code consistently with the surrounding files.
+* Include documentation or unit tests when adding features.
+* Rebase your branch if it falls behind `main` to simplify review.
