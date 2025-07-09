@@ -64,7 +64,7 @@ five seconds with the latest values from the sensors.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for coding style guidelines, the pull request workflow, and instructions on running tests locally.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for coding style guidelines, the pull request workflow, and instructions on running tests locally. By participating in this project you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
