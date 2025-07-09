@@ -9,6 +9,7 @@
 #include "ds18b20.h"
 #include "relay.h"
 #include "logger.h"
+#include "feeding.h"
 #include "ui.h"
 #include "settings.h"
 
@@ -56,6 +57,12 @@ void app_main(void)
         abort();
     }
 
+    err = feeding_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "feeding_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+
     ESP_LOGI(TAG, "All components initialized");
     esp_register_shutdown_handler(&cleanup);
     ui_init(NULL);
@@ -74,6 +81,11 @@ void app_main(void)
         ESP_LOGI(TAG, "DHT22: %.1fC %.1f%%  DS18B20: %.1fC", t1, h1, t2);
         logger_log(t1, h1, t2);
         ui_set_values(t1, h1);
+        time_t last = 0;
+        feeding_get_last(&last, NULL, 0, NULL, NULL);
+        int days_left = 0;
+        feeding_overdue(&days_left);
+        ui_set_feeding(last, days_left);
 
         if ((t1 < temp_min) || (h1 < hum_min)) {
             if (!relay_on) {
