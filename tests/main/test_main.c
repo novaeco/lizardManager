@@ -4,6 +4,7 @@
 #include "dht22.h"
 #include "ds18b20.h"
 #include "relay.h"
+#include "logger.h"
 
 void setUp(void) {}
 void tearDown(void) {}
@@ -56,6 +57,24 @@ void test_relay_requires_init(void)
     TEST_ASSERT_EQUAL(ESP_ERR_INVALID_STATE, relay_set_state(true));
 }
 
+void test_logger_requires_init(void)
+{
+    TEST_ASSERT_EQUAL(ESP_ERR_INVALID_STATE, logger_log(0.0f, 0.0f, 0.0f));
+}
+
+void test_logger_write_temp_fs(void)
+{
+    TEST_ASSERT_EQUAL(ESP_OK, logger_init());
+    TEST_ASSERT_EQUAL(ESP_OK, logger_log(1.0f, 2.0f, 3.0f));
+    logger_close();
+    FILE *f = fopen("/spiffs/readings.csv", "r");
+    TEST_ASSERT_NOT_NULL(f);
+    char line[32] = {0};
+    fgets(line, sizeof(line), f);
+    fclose(f);
+    TEST_ASSERT_EQUAL_STRING("1.0,2.0,3.0\n", line);
+}
+
 void app_main(void)
 {
     UNITY_BEGIN();
@@ -68,5 +87,7 @@ void app_main(void)
     RUN_TEST(test_relay_init_invalid_pin);
     RUN_TEST(test_relay_basic);
     RUN_TEST(test_relay_requires_init);
+    RUN_TEST(test_logger_requires_init);
+    RUN_TEST(test_logger_write_temp_fs);
     UNITY_END();
 }
