@@ -11,3 +11,4 @@ This project defines several custom components:
 - **settings** - stores configurable temperature and humidity ranges in NVS.
 - **genetics** - stores species and morph definitions and basic trait utilities.
 - **feeding** - records feeding events and stores reminder settings.
+- **health** - records weight, length and health events.
