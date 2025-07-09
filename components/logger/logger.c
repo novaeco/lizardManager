@@ -2,6 +2,7 @@
 #include "esp_spiffs.h"
 #include "esp_log.h"
 #include <stdio.h>
+#include <unistd.h>
 
 static const char *TAG = "logger";
 static FILE *log_file = NULL;
@@ -42,6 +43,8 @@ esp_err_t logger_log(float temp_c, float humidity, float probe_temp_c)
 void logger_close(void)
 {
     if (log_file) {
+        fflush(log_file);
+        fsync(fileno(log_file));
         fclose(log_file);
         log_file = NULL;
     }
