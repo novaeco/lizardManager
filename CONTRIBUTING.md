@@ -1,7 +1,9 @@
 # Contributing to Lizard Manager
 
 Thank you for considering a contribution! The following guidelines help keep the
-project consistent and easy to maintain.
+project consistent and easy to maintain. Please read our
+[Code of Conduct](CODE_OF_CONDUCT.md) to understand the expectations for
+participant behavior.
 
 ## Coding Style
 
