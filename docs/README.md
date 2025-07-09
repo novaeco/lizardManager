@@ -91,3 +91,7 @@ The ESP32 operates at 3.3 V logic. Do not connect 5 V signals directly to GPIO
 Large loads such as heating mats or lamps must be switched via a relay or MOSFET rated for the voltage and current of the device. Ensure all mains wiring is properly insulated and follow local electrical safety regulations.
 
 A stable power supply is essential. Budget extra headroom for attached peripherals and avoid powering high-current devices from the ESP32's 3.3 V regulator.
+
+## Adjusting Partition Sizes
+
+The partition layout is defined in `partitions.csv` at the project root. This file specifies the factory app, OTA slot and SPIFFS storage regions. Edit the size column of each entry to change how much flash space is allocated. The build system uses this custom table via the `CONFIG_PARTITION_TABLE_CUSTOM_FILENAME` option in `sdkconfig.defaults`.
