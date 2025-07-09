@@ -18,6 +18,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_color_t *buf1;
 #define LV_TICK_PERIOD_MS 2
 static esp_timer_handle_t tick_timer;
+static esp_lcd_panel_handle_t panel_handle;
 
 static void lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t *color_p)
 {
@@ -40,11 +41,10 @@ static void lvgl_task(void *arg)
 }
 
 #if CONFIG_UI_DISPLAY_INTERFACE_SPI
-static void display_board_init(void)
+static esp_lcd_panel_handle_t display_board_init(void)
 {
     ESP_LOGI(TAG, "Initializing SPI display (%dx%d)", CONFIG_UI_DISPLAY_WIDTH, CONFIG_UI_DISPLAY_HEIGHT);
 
-    static esp_lcd_panel_handle_t panel_handle = NULL;
 
     spi_bus_config_t buscfg = {
         .mosi_io_num = 23,
@@ -76,13 +76,37 @@ static void display_board_init(void)
     ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
     ESP_ERROR_CHECK(esp_lcd_panel_mirror(panel_handle, true, false));
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
+    return panel_handle;
+}
+#elif CONFIG_UI_DISPLAY_INTERFACE_PARALLEL
+static esp_lcd_panel_handle_t display_board_init(void)
+{
+    ESP_LOGI(TAG, "Initializing parallel display (%dx%d)", CONFIG_UI_DISPLAY_WIDTH, CONFIG_UI_DISPLAY_HEIGHT);
+    /* TODO: Add parallel display driver initialization here */
+    return NULL;
+}
+#else
+static esp_lcd_panel_handle_t display_board_init(void)
+{
+    // No display interface selected
+    return NULL;
+}
+#endif
 
-    buf1 = heap_caps_malloc(CONFIG_UI_DISPLAY_WIDTH * 10 * sizeof(lv_color_t), MALLOC_CAP_DMA);
-    lv_disp_draw_buf_init(&draw_buf, buf1, NULL, CONFIG_UI_DISPLAY_WIDTH * 10);
+void ui_init(const ui_screen_config_t *config)
+{
+    int hor_res = config ? config->hor_res : CONFIG_UI_DISPLAY_WIDTH;
+    int ver_res = config ? config->ver_res : CONFIG_UI_DISPLAY_HEIGHT;
+
+    lv_init();
+    panel_handle = display_board_init();
+
+    buf1 = heap_caps_malloc(hor_res * 10 * sizeof(lv_color_t), MALLOC_CAP_DMA);
+    lv_disp_draw_buf_init(&draw_buf, buf1, NULL, hor_res * 10);
     lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = CONFIG_UI_DISPLAY_WIDTH;
-    disp_drv.ver_res = CONFIG_UI_DISPLAY_HEIGHT;
+    disp_drv.hor_res = hor_res;
+    disp_drv.ver_res = ver_res;
     disp_drv.user_data = &panel_handle;
     disp_drv.flush_cb = lvgl_flush_cb;
     disp_drv.draw_buf = &draw_buf;
@@ -96,27 +120,6 @@ static void display_board_init(void)
     ESP_ERROR_CHECK(esp_timer_start_periodic(tick_timer, LV_TICK_PERIOD_MS * 1000));
 
     xTaskCreate(lvgl_task, "lvgl", 4096, NULL, 5, NULL);
-}
-#elif CONFIG_UI_DISPLAY_INTERFACE_PARALLEL
-static void display_board_init(void)
-{
-    ESP_LOGI(TAG, "Initializing parallel display (%dx%d)", CONFIG_UI_DISPLAY_WIDTH, CONFIG_UI_DISPLAY_HEIGHT);
-    /* TODO: Add parallel display driver initialization here */
-}
-#else
-static void display_board_init(void)
-{
-    // No display interface selected
-}
-#endif
-
-void ui_init(const ui_screen_config_t *config)
-{
-    int hor_res = config ? config->hor_res : CONFIG_UI_DISPLAY_WIDTH;
-    int ver_res = config ? config->ver_res : CONFIG_UI_DISPLAY_HEIGHT;
-
-    lv_init();
-    display_board_init();
 
     temp_label = lv_label_create(lv_scr_act());
     hum_label = lv_label_create(lv_scr_act());
