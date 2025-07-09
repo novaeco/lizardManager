@@ -32,6 +32,7 @@ configuration**.
 For SPI screens connect MOSI, MISO, SCLK, CS and D/C to the ESP32's SPI bus.
 Parallel displays require wiring the D0–D7 data lines and the control pins
 (WR, RD, CS and D/C). Use level shifting if your hardware operates at 5 V.
+Refer to `pin_assignments.md` for the default 8080 pin mapping.
 
 The default firmware initializes an **ILI9341** compatible SPI display using the
 `esp_lcd` driver provided by ESP-IDF, so no custom component is required.
