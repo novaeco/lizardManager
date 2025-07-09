@@ -50,10 +50,8 @@ using the `settings_set_temp_range` and `settings_set_hum_range` APIs.
 
 ## Logging
 
-Sensor readings are saved to `/spiffs/readings.csv` on the device's SPIFFS
-partition. You can retrieve the file over UART with
-`idf.py spiffs_upload`/`spiffs_download` or by reading the partition using the
-ESP-IDF SPIFFS utilities.
+Sensor readings are saved to `/spiffs/readings.csv` on the device's SPIFFS partition. Weight and health events are appended to `/spiffs/health.csv`. Store related photos or documents in `/spiffs/attachments`. Retrieve files with `idf.py spiffs_upload`/`spiffs_download` or by reading the SPIFFS partition.
+Use `tools/export_summary.py` to generate a PDF summary of the logs.
 
 ## User Interface
 
