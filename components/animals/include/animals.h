@@ -11,6 +11,7 @@ typedef struct {
     char birthdate[11];
     char legal_status[32];
     char photos[128];
+    char enclosure_id[16];
 } animal_t;
 
 esp_err_t animals_init(void);

@@ -21,17 +21,38 @@ static esp_err_t load_file(void)
         char *saveptr = NULL;
         char *token = strtok_r(line, ",\n", &saveptr);
         if (!token) continue;
-        strncpy(animals[animal_count].id, token, sizeof(animals[animal_count].id)-1);
+        strncpy(animals[animal_count].id, token,
+                sizeof(animals[animal_count].id) - 1);
         token = strtok_r(NULL, ",\n", &saveptr);
-        if (token) strncpy(animals[animal_count].species, token, sizeof(animals[animal_count].species)-1);
+        if (token) {
+            strncpy(animals[animal_count].species, token,
+                    sizeof(animals[animal_count].species) - 1);
+        }
         token = strtok_r(NULL, ",\n", &saveptr);
-        if (token) strncpy(animals[animal_count].sex, token, sizeof(animals[animal_count].sex)-1);
+        if (token) {
+            strncpy(animals[animal_count].sex, token,
+                    sizeof(animals[animal_count].sex) - 1);
+        }
         token = strtok_r(NULL, ",\n", &saveptr);
-        if (token) strncpy(animals[animal_count].birthdate, token, sizeof(animals[animal_count].birthdate)-1);
+        if (token) {
+            strncpy(animals[animal_count].birthdate, token,
+                    sizeof(animals[animal_count].birthdate) - 1);
+        }
         token = strtok_r(NULL, ",\n", &saveptr);
-        if (token) strncpy(animals[animal_count].legal_status, token, sizeof(animals[animal_count].legal_status)-1);
+        if (token) {
+            strncpy(animals[animal_count].legal_status, token,
+                    sizeof(animals[animal_count].legal_status) - 1);
+        }
+        token = strtok_r(NULL, ",\n", &saveptr);
+        if (token) {
+            strncpy(animals[animal_count].photos, token,
+                    sizeof(animals[animal_count].photos) - 1);
+        }
         token = strtok_r(NULL, "\n", &saveptr);
-        if (token) strncpy(animals[animal_count].photos, token, sizeof(animals[animal_count].photos)-1);
+        if (token) {
+            strncpy(animals[animal_count].enclosure_id, token,
+                    sizeof(animals[animal_count].enclosure_id) - 1);
+        }
         animal_count++;
     }
     fclose(f);
@@ -46,13 +67,14 @@ static esp_err_t save_file(void)
         return ESP_FAIL;
     }
     for (size_t i = 0; i < animal_count; ++i) {
-        fprintf(f, "%s,%s,%s,%s,%s,%s\n",
+        fprintf(f, "%s,%s,%s,%s,%s,%s,%s\n",
                 animals[i].id,
                 animals[i].species,
                 animals[i].sex,
                 animals[i].birthdate,
                 animals[i].legal_status,
-                animals[i].photos);
+                animals[i].photos,
+                animals[i].enclosure_id);
     }
     fclose(f);
     return ESP_OK;
