@@ -5,6 +5,7 @@
 
 static const char *TAG = "dht22";
 static gpio_num_t dht22_pin = -1;
+static bool dht22_initialized = false;
 
 static esp_err_t wait_level(int level, uint32_t timeout_us)
 {
@@ -26,13 +27,14 @@ esp_err_t dht22_init(gpio_num_t pin)
     gpio_set_direction(pin, GPIO_MODE_OUTPUT);
     gpio_set_level(pin, 1);
     gpio_set_pull_mode(pin, GPIO_PULLUP_ONLY);
+    dht22_initialized = true;
     ESP_LOGI(TAG, "Initialized on GPIO %d", pin);
     return ESP_OK;
 }
 
 esp_err_t dht22_read(float *temperature, float *humidity)
 {
-    if (dht22_pin < 0) {
+    if (!dht22_initialized) {
         return ESP_ERR_INVALID_STATE;
     }
 
