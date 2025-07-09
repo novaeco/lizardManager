@@ -48,8 +48,9 @@ ESP-IDF SPIFFS utilities.
 ## User Interface
 
 A small LVGL-based UI shows the current temperature and humidity on the
-connected display. The interface updates every five seconds with the latest
-values from the sensors.
+connected display. Use `idf.py menuconfig` to select an SPI or parallel
+interface and to set the default screen resolution. The interface updates every
+five seconds with the latest values from the sensors.
 
 
 ## License

@@ -1,0 +1,27 @@
+menu "UI configuration"
+
+choice UI_DISPLAY_INTERFACE
+    prompt "Display driver interface"
+    default UI_DISPLAY_INTERFACE_SPI
+    help
+        Select the hardware interface used to communicate with the display.
+
+config UI_DISPLAY_INTERFACE_SPI
+    bool "SPI"
+
+config UI_DISPLAY_INTERFACE_PARALLEL
+    bool "8080 parallel"
+
+endchoice
+
+config UI_DISPLAY_WIDTH
+    int "Display width"
+    range 80 800
+    default 320
+
+config UI_DISPLAY_HEIGHT
+    int "Display height"
+    range 80 800
+    default 240
+
+endmenu
