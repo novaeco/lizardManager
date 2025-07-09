@@ -14,6 +14,8 @@
 static const char *TAG = "ui";
 static lv_obj_t *temp_label;
 static lv_obj_t *hum_label;
+static lv_obj_t *feed_label;
+static lv_obj_t *reminder_label;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t *buf1;
 #define LV_TICK_PERIOD_MS 2
@@ -151,10 +153,16 @@ void ui_init(const ui_screen_config_t *config)
 
     temp_label = lv_label_create(lv_scr_act());
     hum_label = lv_label_create(lv_scr_act());
+    feed_label = lv_label_create(lv_scr_act());
+    reminder_label = lv_label_create(lv_scr_act());
     lv_obj_align(temp_label, LV_ALIGN_TOP_MID, 0, 10);
     lv_obj_align(hum_label, LV_ALIGN_TOP_MID, 0, 30);
+    lv_obj_align(feed_label, LV_ALIGN_TOP_MID, 0, 50);
+    lv_obj_align(reminder_label, LV_ALIGN_TOP_MID, 0, 70);
     lv_label_set_text(temp_label, "Temp: --.-C");
     lv_label_set_text(hum_label, "Humidity: --.-%");
+    lv_label_set_text(feed_label, "Last feed: --");
+    lv_label_set_text(reminder_label, "Next feed: --");
     ESP_LOGI(TAG, "UI initialized (%dx%d)", hor_res, ver_res);
 }
 
@@ -166,5 +174,21 @@ void ui_set_values(float temp, float humidity)
     lv_label_set_text(temp_label, buf);
     snprintf(buf, sizeof(buf), "Humidity: %.1f%%", humidity);
     lv_label_set_text(hum_label, buf);
+    lv_timer_handler();
+}
+
+void ui_set_feeding(time_t last_feed, int days_until_next)
+{
+    if (!feed_label || !reminder_label) return;
+    char buf[64];
+    if (last_feed > 0) {
+        struct tm *tm = localtime(&last_feed);
+        strftime(buf, sizeof(buf), "Last feed: %Y-%m-%d", tm);
+    } else {
+        snprintf(buf, sizeof(buf), "Last feed: --");
+    }
+    lv_label_set_text(feed_label, buf);
+    snprintf(buf, sizeof(buf), "Next feed: %d day(s)", days_until_next);
+    lv_label_set_text(reminder_label, buf);
     lv_timer_handler();
 }

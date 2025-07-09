@@ -3,6 +3,7 @@
 This directory stores project documentation.
 
 See `pin_assignments.md` for wiring instructions. See `french_eu_reptile_regs.md` for a summary of French and EU regulations on amateur reptile keeping. For details on registering your animals, read `register_animal.md`.
+Feeding logs are documented in `feeding.md`.
 
 ## Required Hardware
 

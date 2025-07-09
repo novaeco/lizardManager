@@ -61,6 +61,7 @@ A small LVGL-based UI shows the current temperature and humidity on the
 connected display. Use `idf.py menuconfig` to select an SPI or parallel
 interface and to set the default screen resolution. The interface updates every
 five seconds with the latest values from the sensors.
+The screen also shows the last feeding date and days until the next reminder.
 
 ## Contributing
 

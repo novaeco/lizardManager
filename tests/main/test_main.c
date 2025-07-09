@@ -5,6 +5,7 @@
 #include "ds18b20.h"
 #include "relay.h"
 #include "logger.h"
+#include "feeding.h"
 
 void setUp(void) {}
 void tearDown(void) {}
@@ -75,6 +76,19 @@ void test_logger_write_temp_fs(void)
     TEST_ASSERT_EQUAL_STRING("1.0,2.0,3.0\n", line);
 }
 
+void test_feeding_log(void)
+{
+    TEST_ASSERT_EQUAL(ESP_OK, feeding_init());
+    time_t now = 123456;
+    TEST_ASSERT_EQUAL(ESP_OK, feeding_log(now, "mouse", 4.5f, false));
+    time_t ts = 0; char prey[16] = {0}; float wt = 0.0f; bool ref = true;
+    TEST_ASSERT_EQUAL(ESP_OK, feeding_get_last(&ts, prey, sizeof(prey), &wt, &ref));
+    TEST_ASSERT_EQUAL(now, ts);
+    TEST_ASSERT_EQUAL_STRING("mouse", prey);
+    TEST_ASSERT_FLOAT_WITHIN(0.1f, 4.5f, wt);
+    TEST_ASSERT_FALSE(ref);
+}
+
 void app_main(void)
 {
     UNITY_BEGIN();
@@ -92,5 +106,6 @@ void app_main(void)
 
     RUN_TEST(test_logger_requires_init);
     RUN_TEST(test_logger_write_temp_fs);
+    RUN_TEST(test_feeding_log);
     UNITY_END();
 }

@@ -1,0 +1,5 @@
+menu "Feeding"
+config FEEDING_INTERVAL_DAYS
+    int "Default feeding interval (days)"
+    default 7
+endmenu
