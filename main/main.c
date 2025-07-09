@@ -26,7 +26,7 @@ void app_main(void)
     relay_init(GPIO_NUM_2);
     logger_init();
     esp_register_shutdown_handler(&cleanup);
-    ui_init();
+    ui_init(NULL);
 
     while (true) {
         float t1 = 0.0f, h1 = 0.0f, t2 = 0.0f;
