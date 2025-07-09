@@ -7,3 +7,4 @@ This project defines several custom components:
 - **relay** - simple GPIO-controlled relay driver.
 - **logger** - saves sensor readings to SPIFFS.
 - **ui** - minimal LVGL interface displaying temperature and humidity.
+- **settings** - stores configurable temperature and humidity ranges in NVS.

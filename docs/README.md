@@ -25,3 +25,11 @@ Parallel displays require wiring the D0–D7 data lines and the control pins
 
 You may also override the resolution at runtime by passing a
 `ui_screen_config_t` structure to `ui_init`.
+
+## Adjusting Temperature and Humidity Ranges
+
+The relay controlling the heating or humidifying device switches based on
+configurable thresholds stored in NVS. Default values can be set in
+`menuconfig` under **Settings**. At runtime you can update the ranges over
+UART using the `settings_set_*` functions from a custom command handler or
+via `idf.py monitor`.

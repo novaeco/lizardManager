@@ -1,1 +1,2 @@
 source "components/ui/Kconfig"
+source "components/settings/Kconfig"
