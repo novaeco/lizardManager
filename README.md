@@ -47,6 +47,7 @@ using the `settings_set_temp_range` and `settings_set_hum_range` APIs.
 - Control loops to maintain temperature and humidity
 - Simple user interface for configuration and monitoring
 - Data logging and analytics features
+- Enclosure records with maintenance reminders
 
 ## Logging
 

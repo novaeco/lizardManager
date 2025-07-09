@@ -8,6 +8,7 @@ The firmware keeps a record of each reptile in `/spiffs/animals.csv`. Every entr
 - Birth date (`YYYY-MM-DD`)
 - Legal status or permit info
 - Photo file names separated by colons
+- Enclosure identifier
 
 Use the `animals` component APIs to manage this list. After calling `animals_init`, you can add animals with `animals_add`, read them with `animals_get`, modify them with `animals_update`, and remove them with `animals_remove`.
 
