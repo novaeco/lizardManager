@@ -6,6 +6,7 @@
 
 static const char *TAG = "ds18b20";
 static gpio_num_t ds_pin = -1;
+static bool ds_initialized = false;
 
 static esp_err_t ow_reset(void)
 {
@@ -62,6 +63,21 @@ static uint8_t ow_read_byte(void)
     return val;
 }
 
+static uint8_t ds_crc8(const uint8_t *addr, uint8_t len)
+{
+    uint8_t crc = 0;
+    while (len--) {
+        uint8_t inbyte = *addr++;
+        for (uint8_t i = 0; i < 8; i++) {
+            uint8_t mix = (crc ^ inbyte) & 0x01;
+            crc >>= 1;
+            if (mix) crc ^= 0x8C;
+            inbyte >>= 1;
+        }
+    }
+    return crc;
+}
+
 esp_err_t ds18b20_init(gpio_num_t pin)
 {
     if (pin < 0 || pin >= GPIO_NUM_MAX) {
@@ -74,13 +90,14 @@ esp_err_t ds18b20_init(gpio_num_t pin)
         ESP_LOGE(TAG, "Sensor not responding");
         return ret;
     }
+    ds_initialized = true;
     ESP_LOGI(TAG, "Initialized on GPIO %d", pin);
     return ESP_OK;
 }
 
 esp_err_t ds18b20_read(float *temperature)
 {
-    if (ds_pin < 0) {
+    if (!ds_initialized) {
         return ESP_ERR_INVALID_STATE;
     }
 
@@ -93,11 +110,17 @@ esp_err_t ds18b20_read(float *temperature)
     ow_write_byte(0xCC);
     ow_write_byte(0xBE); // read scratchpad
 
-    uint8_t lsb = ow_read_byte();
-    uint8_t msb = ow_read_byte();
+    uint8_t scratchpad[9] = {0};
+    for (int i = 0; i < 9; i++) {
+        scratchpad[i] = ow_read_byte();
+    }
     ow_reset();
 
-    int16_t raw = (msb << 8) | lsb;
+    if (ds_crc8(scratchpad, 8) != scratchpad[8]) {
+        return ESP_ERR_INVALID_CRC;
+    }
+
+    int16_t raw = (scratchpad[1] << 8) | scratchpad[0];
     if (temperature) *temperature = raw / 16.0f;
 
     ESP_LOGI(TAG, "Read temp=%.1fC", temperature ? *temperature : 0);
