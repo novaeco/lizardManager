@@ -7,6 +7,11 @@ static const char *TAG = "dht22";
 static gpio_num_t dht22_pin = -1;
 static bool dht22_initialized = false;
 
+/* Timings in microseconds for the DHT22 protocol */
+#define DHT22_START_US        1100
+#define DHT22_RESPONSE_US       80
+#define DHT22_BIT_THRESHOLD_US  40
+
 static esp_err_t wait_level(int level, uint32_t timeout_us)
 {
     int64_t start = esp_timer_get_time();
@@ -43,22 +48,23 @@ esp_err_t dht22_read(float *temperature, float *humidity)
     // start signal
     gpio_set_direction(dht22_pin, GPIO_MODE_OUTPUT);
     gpio_set_level(dht22_pin, 0);
-    esp_rom_delay_us(1100);
+    esp_rom_delay_us(DHT22_START_US);
     gpio_set_level(dht22_pin, 1);
-    esp_rom_delay_us(40);
+    esp_rom_delay_us(DHT22_RESPONSE_US / 2);
     gpio_set_direction(dht22_pin, GPIO_MODE_INPUT);
 
-    if (wait_level(0, 80) != ESP_OK || wait_level(1, 80) != ESP_OK)
+    if (wait_level(0, DHT22_RESPONSE_US) != ESP_OK ||
+        wait_level(1, DHT22_RESPONSE_US) != ESP_OK)
         return ESP_ERR_TIMEOUT;
 
     for (int i = 0; i < 40; i++) {
-        if (wait_level(0, 80) != ESP_OK) return ESP_ERR_TIMEOUT;
-        if (wait_level(1, 80) != ESP_OK) return ESP_ERR_TIMEOUT;
+        if (wait_level(0, DHT22_RESPONSE_US) != ESP_OK) return ESP_ERR_TIMEOUT;
+        if (wait_level(1, DHT22_RESPONSE_US) != ESP_OK) return ESP_ERR_TIMEOUT;
         int64_t start = esp_timer_get_time();
-        if (wait_level(0, 80) != ESP_OK) return ESP_ERR_TIMEOUT;
+        if (wait_level(0, DHT22_RESPONSE_US) != ESP_OK) return ESP_ERR_TIMEOUT;
         int64_t len = esp_timer_get_time() - start;
         data[i/8] <<= 1;
-        if (len > 40) data[i/8] |= 1;
+        if (len > DHT22_BIT_THRESHOLD_US) data[i/8] |= 1;
     }
 
     uint8_t checksum = data[0] + data[1] + data[2] + data[3];
