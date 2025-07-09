@@ -19,6 +19,8 @@ Lizard Manager is an ESP-IDF based project for monitoring and controlling a rept
 1. Install ESP-IDF and set up the environment.
 2. Run `idf.py set-target esp32` once for the project.
 3. Build the firmware with `idf.py build`.
+   The UI component pulls LVGL version 8.3 automatically from Espressif's
+   component registry during this step.
 4. Flash and monitor with `idf.py flash monitor`.
 
 ## Configuration
