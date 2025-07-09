@@ -4,6 +4,16 @@ This directory stores project documentation.
 
 See `pin_assignments.md` for wiring instructions. See `french_eu_reptile_regs.md` for a summary of French and EU regulations on amateur reptile keeping.
 
+## Required Hardware
+
+The following peripherals were used when developing the project:
+
+- ESP32 development board (e.g. DevKitC or NodeMCU‑32S)
+- DHT22 humidity/temperature sensor on **GPIO4**
+- DS18B20 temperature probe on **GPIO5**
+- Relay module driven by **GPIO2**
+- ILI9341 compatible SPI display connected as shown in the wiring section below
+
 ## Logs and Interface
 
 Sensor readings are continually appended to `/spiffs/readings.csv` on the
@@ -24,8 +34,8 @@ Parallel displays require wiring the D0–D7 data lines and the control pins
 (WR, RD, CS and D/C). Use level shifting if your hardware operates at 5 V.
 
 The default firmware initializes an **ILI9341** compatible SPI display using the
-`esp_lcd` driver. Pin assignments can be customized in the source or via
-`menuconfig`.
+`esp_lcd` driver provided by ESP-IDF, so no custom component is required.
+Pin assignments can be customized in the source or via `menuconfig`.
 
 You may also override the resolution at runtime by passing a
 `ui_screen_config_t` structure to `ui_init`.
