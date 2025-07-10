@@ -1,0 +1,21 @@
+menu "Language"
+
+choice I18N_LANG
+    prompt "UI language"
+    default I18N_LANG_EN
+
+config I18N_LANG_EN
+    bool "English"
+
+config I18N_LANG_FR
+    bool "French"
+
+config I18N_LANG_DE
+    bool "German"
+
+config I18N_LANG_ES
+    bool "Spanish"
+
+endchoice
+
+endmenu

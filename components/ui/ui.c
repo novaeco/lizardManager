@@ -10,6 +10,7 @@
 #include "esp_lcd_panel_vendor.h"
 #include "driver/spi_master.h"
 #include "esp_heap_caps.h"
+#include "i18n.h"
 
 static const char *TAG = "ui";
 static lv_obj_t *temp_label;
@@ -19,6 +20,13 @@ static lv_obj_t *reminder_label;
 static lv_obj_t *stats_label;
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t *buf1;
+#if CONFIG_UI_HIGH_CONTRAST
+static lv_style_t contrast_style;
+#endif
+#if CONFIG_UI_LARGE_FONT
+extern const lv_font_t lv_font_montserrat_28;
+static const lv_font_t *font_large = &lv_font_montserrat_28;
+#endif
 #define LV_TICK_PERIOD_MS 2
 static esp_timer_handle_t tick_timer;
 static esp_lcd_panel_handle_t panel_handle;
@@ -157,16 +165,35 @@ void ui_init(const ui_screen_config_t *config)
     feed_label = lv_label_create(lv_scr_act());
     reminder_label = lv_label_create(lv_scr_act());
     stats_label = lv_label_create(lv_scr_act());
+#if CONFIG_UI_HIGH_CONTRAST
+    lv_style_init(&contrast_style);
+    lv_style_set_text_color(&contrast_style, lv_color_white());
+    lv_style_set_bg_color(&contrast_style, lv_color_black());
+    lv_style_set_bg_opa(&contrast_style, LV_OPA_COVER);
+    lv_obj_add_style(lv_scr_act(), &contrast_style, 0);
+    lv_obj_add_style(temp_label, &contrast_style, 0);
+    lv_obj_add_style(hum_label, &contrast_style, 0);
+    lv_obj_add_style(feed_label, &contrast_style, 0);
+    lv_obj_add_style(reminder_label, &contrast_style, 0);
+    lv_obj_add_style(stats_label, &contrast_style, 0);
+#endif
+#if CONFIG_UI_LARGE_FONT
+    lv_obj_set_style_text_font(temp_label, font_large, 0);
+    lv_obj_set_style_text_font(hum_label, font_large, 0);
+    lv_obj_set_style_text_font(feed_label, font_large, 0);
+    lv_obj_set_style_text_font(reminder_label, font_large, 0);
+    lv_obj_set_style_text_font(stats_label, font_large, 0);
+#endif
     lv_obj_align(temp_label, LV_ALIGN_TOP_MID, 0, 10);
     lv_obj_align(hum_label, LV_ALIGN_TOP_MID, 0, 30);
     lv_obj_align(feed_label, LV_ALIGN_TOP_MID, 0, 50);
     lv_obj_align(reminder_label, LV_ALIGN_TOP_MID, 0, 70);
     lv_obj_align(stats_label, LV_ALIGN_TOP_MID, 0, 90);
-    lv_label_set_text(temp_label, "Temp: --.-C");
-    lv_label_set_text(hum_label, "Humidity: --.-%");
-    lv_label_set_text(feed_label, "Last feed: --");
-    lv_label_set_text(reminder_label, "Next feed: --");
-    lv_label_set_text(stats_label, "Stats: --");
+    lv_label_set_text(temp_label, i18n_str(I18N_TEMP_STATIC));
+    lv_label_set_text(hum_label, i18n_str(I18N_HUM_STATIC));
+    lv_label_set_text(feed_label, i18n_str(I18N_LAST_FEED_STATIC));
+    lv_label_set_text(reminder_label, i18n_str(I18N_NEXT_FEED_STATIC));
+    lv_label_set_text(stats_label, i18n_str(I18N_STATS_STATIC));
     ESP_LOGI(TAG, "UI initialized (%dx%d)", hor_res, ver_res);
 }
 
@@ -174,9 +201,9 @@ void ui_set_values(float temp, float humidity)
 {
     if (!temp_label || !hum_label) return;
     char buf[32];
-    snprintf(buf, sizeof(buf), "Temp: %.1fC", temp);
+    snprintf(buf, sizeof(buf), i18n_str(I18N_TEMP), temp);
     lv_label_set_text(temp_label, buf);
-    snprintf(buf, sizeof(buf), "Humidity: %.1f%%", humidity);
+    snprintf(buf, sizeof(buf), i18n_str(I18N_HUMIDITY), humidity);
     lv_label_set_text(hum_label, buf);
     lv_timer_handler();
 }
@@ -187,12 +214,14 @@ void ui_set_feeding(time_t last_feed, int days_until_next)
     char buf[64];
     if (last_feed > 0) {
         struct tm *tm = localtime(&last_feed);
-        strftime(buf, sizeof(buf), "Last feed: %Y-%m-%d", tm);
+        char date[32];
+        strftime(date, sizeof(date), "%Y-%m-%d", tm);
+        snprintf(buf, sizeof(buf), i18n_str(I18N_LAST_FEED), date);
     } else {
-        snprintf(buf, sizeof(buf), "Last feed: --");
+        snprintf(buf, sizeof(buf), i18n_str(I18N_LAST_FEED_STATIC));
     }
     lv_label_set_text(feed_label, buf);
-    snprintf(buf, sizeof(buf), "Next feed: %d day(s)", days_until_next);
+    snprintf(buf, sizeof(buf), i18n_str(I18N_NEXT_FEED), days_until_next);
     lv_label_set_text(reminder_label, buf);
     lv_timer_handler();
 }
@@ -201,7 +230,7 @@ void ui_set_stats(int feed_count, float avg_interval_days)
 {
     if (!stats_label) return;
     char buf[64];
-    snprintf(buf, sizeof(buf), "Stats: %d feedings, %.1f d avg", feed_count, avg_interval_days);
+    snprintf(buf, sizeof(buf), i18n_str(I18N_STATS), feed_count, avg_interval_days);
     lv_label_set_text(stats_label, buf);
     lv_timer_handler();
 }

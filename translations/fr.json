@@ -1,0 +1,12 @@
+{
+  "TEMP_STATIC": "Température: --.-C",
+  "HUM_STATIC": "Humidité: --.-%",
+  "LAST_FEED_STATIC": "Dernier repas: --",
+  "NEXT_FEED_STATIC": "Prochain repas: --",
+  "STATS_STATIC": "Stats: --",
+  "TEMP": "Température: %.1fC",
+  "HUMIDITY": "Humidité: %.1f%%",
+  "LAST_FEED": "Dernier repas: %s",
+  "NEXT_FEED": "Prochain repas: %d jour(s)",
+  "STATS": "Stats: %d repas, moyenne %.1f j"
+}

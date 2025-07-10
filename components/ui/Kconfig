@@ -24,4 +24,16 @@ config UI_DISPLAY_HEIGHT
     range 80 800
     default 240
 
+config UI_HIGH_CONTRAST
+    bool "High contrast theme"
+    default n
+    help
+        Use a black background with white text for better visibility.
+
+config UI_LARGE_FONT
+    bool "Large font mode"
+    default n
+    help
+        Use a 28px font for easier reading.
+
 endmenu
