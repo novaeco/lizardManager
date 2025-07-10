@@ -10,6 +10,7 @@
 #include "relay.h"
 #include "logger.h"
 #include "feeding.h"
+#include "ledger.h"
 #include "ui.h"
 #include "settings.h"
 
@@ -60,6 +61,12 @@ void app_main(void)
     err = feeding_init();
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "feeding_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+
+    err = ledger_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "ledger_init failed: %s", esp_err_to_name(err));
         abort();
     }
 

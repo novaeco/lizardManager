@@ -20,6 +20,7 @@ def main(out_pdf):
     animals = read_csv('spiffs/animals.csv')
     feedings = read_csv('spiffs/feedings.csv')
     health = read_csv('spiffs/health.csv')
+    ledger = read_csv('spiffs/ledger.csv')
 
     pdf = FPDF()
     pdf.add_page()
@@ -35,6 +36,15 @@ def main(out_pdf):
     pdf.ln(10)
 
     pdf.cell(40, 10, 'Health records: %d' % len(health))
+    pdf.ln(10)
+
+    purchases = sum(float(row[5]) for row in ledger if len(row) >= 6 and row[1] == '0')
+    sales = sum(float(row[5]) for row in ledger if len(row) >= 6 and row[1] == '1')
+    pdf.cell(40, 10, 'Purchases total: %.2f EUR' % purchases)
+    pdf.ln(10)
+    pdf.cell(40, 10, 'Sales total: %.2f EUR' % sales)
+    pdf.ln(10)
+    pdf.cell(40, 10, 'Net: %.2f EUR' % (sales - purchases))
     pdf.ln(10)
 
     pdf.output(out_pdf)

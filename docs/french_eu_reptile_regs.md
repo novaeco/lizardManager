@@ -31,4 +31,4 @@ Always confirm the latest legal texts and consult with local authorities or prof
 
 ## Generating Required Documents
 
-Use `tools/generate_pdf_docs.py` to create legally compliant PDFs for breeding logs, certificates of capacity, and sales records. Pass `--storage sdcard` to store the files on an SD card instead of SPIFFS.
+Use `tools/generate_pdf_docs.py` to create legally compliant PDFs for breeding logs, certificates of capacity, sales records, and cession certificates. Pass `--storage sdcard` to store the files on an SD card instead of SPIFFS.
