@@ -3,7 +3,7 @@
 This directory stores project documentation.
 
 See `pin_assignments.md` for wiring instructions. See `french_eu_reptile_regs.md` for a summary of French and EU regulations on amateur reptile keeping. For details on registering your animals, read `register_animal.md`.
-Feeding logs are documented in `feeding.md`. Health records are described in `health.md`. Stock inventory is documented in `stock.md`. Information about managing terrariums is in `enclosures.md`.
+Feeding logs are documented in `feeding.md`. Health records are described in `health.md`. Stock inventory is documented in `stock.md`. Purchases and sales are stored in `ledger.md`. Information about managing terrariums is in `enclosures.md`.
 
 ## Required Hardware
 

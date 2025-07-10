@@ -51,9 +51,9 @@ using the `settings_set_temp_range` and `settings_set_hum_range` APIs.
 
 ## Logging
 
-Sensor readings are saved to `/spiffs/readings.csv` on the device's SPIFFS partition. Weight and health events are appended to `/spiffs/health.csv`. Store related photos or documents in `/spiffs/attachments`. Retrieve files with `idf.py spiffs_upload`/`spiffs_download` or by reading the SPIFFS partition.
+Sensor readings are saved to `/spiffs/readings.csv` on the device's SPIFFS partition. Weight and health events are appended to `/spiffs/health.csv`. Purchase and sale transactions are stored in `/spiffs/ledger.csv`. Store related photos or documents in `/spiffs/attachments`. Retrieve files with `idf.py spiffs_upload`/`spiffs_download` or by reading the SPIFFS partition.
 Use `tools/export_summary.py` to generate a PDF summary of the logs.
-Use `tools/generate_pdf_docs.py` to create breeding, capacity, and sales certificates in PDF format.
+Use `tools/generate_pdf_docs.py` to create breeding, capacity, sales, and cession certificates in PDF format.
 
 ## User Interface
 
