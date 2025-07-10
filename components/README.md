@@ -12,3 +12,4 @@ This project defines several custom components:
 - **genetics** - stores species and morph definitions and basic trait utilities.
 - **feeding** - records feeding events and stores reminder settings.
 - **health** - records weight, length and health events.
+- **stock** - tracks feeder insect inventory and expiration dates.
