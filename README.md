@@ -71,6 +71,9 @@ connected display. Use `idf.py menuconfig` to select an SPI or parallel
 interface and to set the default screen resolution. The interface updates every
 five seconds with the latest values from the sensors.
 The screen also shows the last feeding date and days until the next reminder.
+High-contrast and large-font modes can be enabled in `menuconfig` under **UI configuration**.
+An optional scanner component provides hooks for RFID or QR-code readers so an animal's record can be opened quickly when a tag is scanned.
+Translations for English, French, German and Spanish are built in. Select the preferred language in `menuconfig` under **Language**.
 
 ## Contributing
 

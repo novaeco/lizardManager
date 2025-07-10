@@ -1,0 +1,5 @@
+menu "Scanner"
+config SCANNER_ENABLE
+    bool "Enable RFID/QR scanner"
+    default n
+endmenu

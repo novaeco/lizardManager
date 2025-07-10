@@ -15,6 +15,7 @@
 #include "auth.h"
 #include "audit.h"
 #include "ui.h"
+#include "i18n.h"
 #include "settings.h"
 #include "backup.h"
 
@@ -49,6 +50,7 @@ void app_main(void)
         ESP_LOGE(TAG, "settings_init failed: %s", esp_err_to_name(err));
         abort();
     }
+    i18n_init();
     ESP_LOGI(TAG, "settings initialized");
 
     err = dht22_init(GPIO_NUM_4);

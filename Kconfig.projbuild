@@ -1,3 +1,5 @@
 source "components/ui/Kconfig"
 source "components/settings/Kconfig"
 source "components/backup/Kconfig"
+source "components/i18n/Kconfig"
+source "components/scanner/Kconfig"
