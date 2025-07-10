@@ -93,6 +93,10 @@ void app_main(void)
         int days_left = 0;
         feeding_overdue(&days_left);
         ui_set_feeding(last, days_left);
+        int feed_count = 0;
+        float avg_interval = 0.0f;
+        feeding_get_stats(&feed_count, &avg_interval);
+        ui_set_stats(feed_count, avg_interval);
 
         if ((t1 < temp_min) || (h1 < hum_min)) {
             if (!relay_on) {

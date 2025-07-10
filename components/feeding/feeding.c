@@ -115,3 +115,27 @@ bool feeding_overdue(int *days_until)
     if (days_until) *days_until = interval_days - diff;
     return diff >= interval_days;
 }
+
+esp_err_t feeding_get_stats(int *count, float *avg_interval_days)
+{
+    if (!log_file) return ESP_ERR_INVALID_STATE;
+    fflush(log_file);
+    fseek(log_file, 0, SEEK_SET);
+    char line[128];
+    int cnt = 0;
+    time_t prev = 0;
+    double total = 0.0;
+    while (fgets(line, sizeof(line), log_file)) {
+        time_t ts; char prey[64]; float wt; int ref;
+        if (sscanf(line, "%ld,%63[^,],%f,%d", (long *)&ts, prey, &wt, &ref) == 4) {
+            if (prev != 0) {
+                total += difftime(ts, prev) / 86400.0;
+            }
+            prev = ts;
+            cnt++;
+        }
+    }
+    if (count) *count = cnt;
+    if (avg_interval_days) *avg_interval_days = (cnt > 1) ? total / (cnt - 1) : 0.0f;
+    return ESP_OK;
+}

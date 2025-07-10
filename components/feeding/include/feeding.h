@@ -9,3 +9,4 @@ esp_err_t feeding_get_last(time_t *timestamp, char *prey, size_t prey_len, float
 esp_err_t feeding_set_interval_days(int days);
 esp_err_t feeding_get_interval_days(int *days);
 bool feeding_overdue(int *days_until);
+esp_err_t feeding_get_stats(int *count, float *avg_interval_days);
