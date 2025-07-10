@@ -64,6 +64,16 @@ encrypted with AES using the provided key before being sent. Automatic backups
 run every `CONFIG_BACKUP_INTERVAL_HOURS` hours, and you can trigger a manual
 upload at runtime with `backup_manual()`.
 
+## Archiving
+
+Run `tools/export_encrypted.py` to create an encrypted archive of the logs and
+records stored on the device. The script gathers the files from the SPIFFS
+partition, creates a compressed tarball and encrypts it using `openssl` with
+AES‑256. Provide the passphrase with the `--passphrase` option or set the
+`EXPORT_PASSPHRASE` environment variable. The resulting `.tar.gz.enc` file can
+be supplied to inspectors for regulatory compliance. Audit logs are rotated
+daily as `audit_YYYYMMDD.csv` and remain immutable once written.
+
 ## User Interface
 
 A small LVGL-based UI shows the current temperature and humidity on the
