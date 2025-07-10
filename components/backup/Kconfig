@@ -1,0 +1,25 @@
+menu "Backup"
+config BACKUP_ENABLE
+    bool "Enable Wi-Fi backups"
+    default y
+config BACKUP_WIFI_SSID
+    string "Wi-Fi SSID"
+    depends on BACKUP_ENABLE
+    default "myssid"
+config BACKUP_WIFI_PASS
+    string "Wi-Fi Password"
+    depends on BACKUP_ENABLE
+    default "mypassword"
+config BACKUP_SERVER_URL
+    string "Backup server URL"
+    depends on BACKUP_ENABLE
+    default "http://example.com/upload"
+config BACKUP_AES_KEY
+    string "AES encryption key (hex)"
+    depends on BACKUP_ENABLE
+    default "00112233445566778899aabbccddeeff"
+config BACKUP_INTERVAL_HOURS
+    int "Automatic backup interval (hours)"
+    depends on BACKUP_ENABLE
+    default 24
+endmenu
