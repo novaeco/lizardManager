@@ -12,6 +12,8 @@
 #include "feeding.h"
 #include "ledger.h"
 #include "permits.h"
+#include "auth.h"
+#include "audit.h"
 #include "ui.h"
 #include "settings.h"
 #include "backup.h"
@@ -21,6 +23,7 @@ static const char *TAG = "main";
 static void cleanup(void)
 {
     logger_close();
+    audit_close();
 }
 
 void app_main(void)
@@ -28,6 +31,18 @@ void app_main(void)
     ESP_LOGI(TAG, "Hello Lizard Manager!");
 
     esp_err_t err;
+
+    err = audit_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "audit_init failed: %s", esp_err_to_name(err));
+    } else {
+        audit_log("system", "boot");
+    }
+
+    err = auth_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "auth_init failed: %s", esp_err_to_name(err));
+    }
 
     err = settings_init();
     if (err != ESP_OK) {
