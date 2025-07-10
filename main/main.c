@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "feeding.h"
 #include "ledger.h"
+#include "permits.h"
 #include "ui.h"
 #include "settings.h"
 #include "backup.h"
@@ -71,6 +72,12 @@ void app_main(void)
         abort();
     }
 
+    err = permits_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "permits_init failed: %s", esp_err_to_name(err));
+        abort();
+    }
+
     err = backup_init();
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "backup_init failed: %s", esp_err_to_name(err));
@@ -105,6 +112,21 @@ void app_main(void)
         float avg_interval = 0.0f;
         feeding_get_stats(&feed_count, &avg_interval);
         ui_set_stats(feed_count, avg_interval);
+
+        permit_t list[PERMITS_MAX];
+        size_t count = 0;
+        permits_list(list, PERMITS_MAX, &count);
+        for (size_t i = 0; i < count; ++i) {
+            int days = 0;
+            if (permits_due(&list[i], &days)) {
+                ESP_LOGW(TAG, "Permit for %s expired %d days ago", list[i].animal_id, -days);
+            } else if (days <= 30) {
+                ESP_LOGI(TAG, "Permit for %s expires in %d days", list[i].animal_id, days);
+            }
+            if (permits_inspection_due(&list[i], &days)) {
+                ESP_LOGW(TAG, "Inspection for %s overdue by %d days", list[i].animal_id, -days);
+            }
+        }
 
         if ((t1 < temp_min) || (h1 < hum_min)) {
             if (!relay_on) {
