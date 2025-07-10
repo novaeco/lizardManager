@@ -13,6 +13,7 @@
 #include "ledger.h"
 #include "ui.h"
 #include "settings.h"
+#include "backup.h"
 
 static const char *TAG = "main";
 
@@ -68,6 +69,13 @@ void app_main(void)
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "ledger_init failed: %s", esp_err_to_name(err));
         abort();
+    }
+
+    err = backup_init();
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "backup_init failed: %s", esp_err_to_name(err));
+    } else {
+        backup_schedule(CONFIG_BACKUP_INTERVAL_HOURS);
     }
 
     ESP_LOGI(TAG, "All components initialized");

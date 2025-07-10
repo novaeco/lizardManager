@@ -56,6 +56,14 @@ Use `tools/export_summary.py` to generate a PDF summary of the logs.
 Use `tools/generate_pdf_docs.py` to create breeding, capacity, sales, and cession certificates in PDF format.
 Use `tools/analyze_logs.py` to generate graphs showing growth curves and feeding frequency.
 
+## Backups
+
+Logs and configuration can be uploaded over Wi-Fi to a remote server. Set your
+Wi-Fi credentials and server URL in `menuconfig` under **Backup**. Backups are
+encrypted with AES using the provided key before being sent. Automatic backups
+run every `CONFIG_BACKUP_INTERVAL_HOURS` hours, and you can trigger a manual
+upload at runtime with `backup_manual()`.
+
 ## User Interface
 
 A small LVGL-based UI shows the current temperature and humidity on the
