@@ -14,3 +14,4 @@ This project defines several custom components:
 - **health** - records weight, length and health events.
 - **stock** - tracks feeder insect inventory and expiration dates.
 - **ledger** - logs purchases and sales with counterparty details.
+- **permits** - tracks permit renewal dates and inspection schedules.
