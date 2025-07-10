@@ -6,6 +6,7 @@
 #include "relay.h"
 #include "logger.h"
 #include "feeding.h"
+#include "stock.h"
 
 void setUp(void) {}
 void tearDown(void) {}
@@ -89,6 +90,21 @@ void test_feeding_log(void)
     TEST_ASSERT_FALSE(ref);
 }
 
+void test_stock_alerts(void)
+{
+    TEST_ASSERT_EQUAL(ESP_OK, stock_init());
+    stock_item_t item = {
+        .name = "crickets",
+        .quantity = 5,
+        .expiration = 1000
+    };
+    TEST_ASSERT_EQUAL(ESP_OK, stock_add(&item));
+    TEST_ASSERT_TRUE(stock_low("crickets", 10));
+    TEST_ASSERT_FALSE(stock_low("crickets", 4));
+    TEST_ASSERT_TRUE(stock_expiring_soon("crickets", 900, 2));
+    TEST_ASSERT_FALSE(stock_expiring_soon("crickets", 900, 0));
+}
+
 void app_main(void)
 {
     UNITY_BEGIN();
@@ -107,5 +123,6 @@ void app_main(void)
     RUN_TEST(test_logger_requires_init);
     RUN_TEST(test_logger_write_temp_fs);
     RUN_TEST(test_feeding_log);
+    RUN_TEST(test_stock_alerts);
     UNITY_END();
 }
